@@ -5,77 +5,33 @@ import React, { useState } from 'react'
 const Dashboard = () => {
   const [hoursData, setHoursData] = useState({});
 
-  function fetchData(func) {
+  function fetchData(func, timeframe) {
     fetch('./data.json')
       .then(res => res.json())
-      .then(data => setHoursData( func(data) ));
+      .then(data => setHoursData( func(data, timeframe) ));
   }
 
-  function updateDaily(data) {
+  function updateInfo(data, timeframe) {
     return {
-      "work_current": data[0].timeframes.daily.current,
-      "work_previous": data[0].timeframes.daily.previous,
+      "work_current": data[0].timeframes[timeframe].current,
+      "work_previous": data[0].timeframes[timeframe].previous,
 
-      "play_current": data[1].timeframes.daily.current,
-      "play_previous": data[1].timeframes.daily.previous,
+      "play_current": data[1].timeframes[timeframe].current,
+      "play_previous": data[1].timeframes[timeframe].previous,
 
-      "study_current": data[2].timeframes.daily.current,
-      "study_previous": data[2].timeframes.daily.previous,
+      "study_current": data[2].timeframes[timeframe].current,
+      "study_previous": data[2].timeframes[timeframe].previous,
 
-      "exercise_current": data[3].timeframes.daily.current,
-      "exercise_previous": data[3].timeframes.daily.previous,
+      "exercise_current": data[3].timeframes[timeframe].current,
+      "exercise_previous": data[3].timeframes[timeframe].previous,
 
-      "social_current": data[4].timeframes.daily.current,
-      "social_previous": data[4].timeframes.daily.previous,
+      "social_current": data[4].timeframes[timeframe].current,
+      "social_previous": data[4].timeframes[timeframe].previous,
 
-      "care_current": data[5].timeframes.daily.current,
-      "care_previous": data[5].timeframes.daily.previous
+      "care_current": data[5].timeframes[timeframe].current,
+      "care_previous": data[5].timeframes[timeframe].previous
     };
   }
-
-  function updateWeekly(data) {
-    return {
-      "work_current": data[0].timeframes.weekly.current,
-      "work_previous": data[0].timeframes.weekly.previous,
-
-      "play_current": data[1].timeframes.weekly.current,
-      "play_previous": data[1].timeframes.weekly.previous,
-
-      "study_current": data[2].timeframes.weekly.current,
-      "study_previous": data[2].timeframes.weekly.previous,
-
-      "exercise_current": data[3].timeframes.weekly.current,
-      "exercise_previous": data[3].timeframes.weekly.previous,
-
-      "social_current": data[4].timeframes.weekly.current,
-      "social_previous": data[4].timeframes.weekly.previous,
-
-      "care_current": data[5].timeframes.weekly.current,
-      "care_previous": data[5].timeframes.weekly.previous
-    };
-  }
-
-  function updateMonthly(data) {
-    return {
-      "work_current": data[0].timeframes.monthly.current,
-      "work_previous": data[0].timeframes.monthly.previous,
-
-      "play_current": data[1].timeframes.monthly.current,
-      "play_previous": data[1].timeframes.monthly.previous,
-
-      "study_current": data[2].timeframes.monthly.current,
-      "study_previous": data[2].timeframes.monthly.previous,
-
-      "exercise_current": data[3].timeframes.monthly.current,
-      "exercise_previous": data[3].timeframes.monthly.previous,
-
-      "social_current": data[4].timeframes.monthly.current,
-      "social_previous": data[4].timeframes.monthly.previous,
-
-      "care_current": data[5].timeframes.monthly.current,
-      "care_previous": data[5].timeframes.monthly.previous
-    }
-  } 
 
   return (
     <div className="dashboard">
@@ -88,9 +44,9 @@ const Dashboard = () => {
           </div>
         </div>
         <div className="profile__buttons">
-          <Button buttonName="Daily" funcName={() => fetchData(updateDaily)} />
-          <Button buttonName="Weekly" funcName={() => fetchData(updateWeekly)} />
-          <Button buttonName="Monthly" funcName={() => fetchData(updateMonthly)} />
+          <Button buttonName="Daily" funcName={() => fetchData(updateInfo, "daily")} />
+          <Button buttonName="Weekly" funcName={() => fetchData(updateInfo, "weekly")} />
+          <Button buttonName="Monthly" funcName={() => fetchData(updateInfo, "monthly")} />
         </div>
       </div>
 
