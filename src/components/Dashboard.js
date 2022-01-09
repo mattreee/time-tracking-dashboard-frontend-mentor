@@ -88,138 +88,89 @@ const Dashboard = () => {
           </div>
         </div>
         <div className="profile__buttons">
-          <button onClick={() => fetchData(updateDaily)} className="profile__button">Daily</button>
-          <button onClick={() => fetchData(updateWeekly)} className="profile__button">Weekly</button>
-          <button onClick={() => fetchData(updateMonthly)} className="profile__button">Monthly</button>
+          <Button buttonName="Daily" funcName={() => fetchData(updateDaily)} />
+          <Button buttonName="Weekly" funcName={() => fetchData(updateWeekly)} />
+          <Button buttonName="Monthly" funcName={() => fetchData(updateMonthly)} />
         </div>
       </div>
 
-      <div className="card card-work">
-        <div className="card__content">
-          <div className="card__head">
-            <h2 className='card__title'>Work</h2>
-            <img className='card__dots' src={ThreeDots} alt="" />
-          </div>
-          <div className="card__hours">
-            <p className='card__current'>{
-              hoursData.work_current === undefined
-              ?'0'
-              : hoursData.work_current + 'hrs'
-            }</p>
-            <p className='card__previous'>Previous - {
-              hoursData.work_previous === undefined
-              ? '0'
-              : hoursData.work_previous + 'hrs'
-            }</p>
-          </div>
-        </div>
-      </div>
+      <Card
+        title="Work"
+        dataCurrent={hoursData.work_current}
+        dataPrevious={hoursData.work_previous}
+        cardClass="card-work"
+      />
 
-      <div className="card card-play">
-        <div className="card__content">
-          <div className="card__head">
-            <h2 className='card__title'>Play</h2>
-            <img className='card__dots' src={ThreeDots} alt="" />
-          </div>
-          <div className="card__hours">
-            <p className='card__current'>{
-              hoursData.play_current === undefined
-              ?'0'
-              : hoursData.play_current + 'hrs'
-            }</p>
-            <p className='card__previous'>Previous - {
-              hoursData.play_previous === undefined
-              ? '0'
-              : hoursData.play_previous + 'hrs'
-            }</p>
-          </div>
-        </div>
-      </div>
+      <Card
+        title="Play"
+        dataCurrent={hoursData.play_current}
+        dataPrevious={hoursData.play_previous}
+        cardClass="card-play"
+      />
 
-      <div className="card card-study">
-        <div className="card__content">
-          <div className="card__head">
-            <h2 className='card__title'>Study</h2>
-            <img className='card__dots' src={ThreeDots} alt="" />
-          </div>
-          <div className="card__hours">
-            <p className='card__current'>{
-              hoursData.study_current === undefined
-              ?'0'
-              : hoursData.study_current + 'hrs'
-            }</p>
-            <p className='card__previous'>Previous - {
-              hoursData.study_previous === undefined
-              ? '0'
-              : hoursData.study_previous + 'hrs'
-            }</p>
-          </div>
-        </div>
-      </div>
+      <Card
+        title="Study"
+        dataCurrent={hoursData.study_current}
+        dataPrevious={hoursData.study_previous}
+        cardClass="card-study"
+      />
 
-      <div className="card card-exercise">
-        <div className="card__content">
-          <div className="card__head">
-            <h2 className='card__title'>Exercise</h2>
-            <img className='card__dots' src={ThreeDots} alt="" />
-          </div>
-          <div className="card__hours">
-            <p className='card__current'>{
-              hoursData.exercise_current === undefined
-              ?'0'
-              : hoursData.exercise_current + 'hrs'
-            }</p>
-            <p className='card__previous'>Previous - {
-              hoursData.exercise_previous === undefined
-              ? '0'
-              : hoursData.exercise_previous + 'hrs'
-            }</p>
-          </div>
-        </div>
-      </div>
+      <Card
+        title="Exercise"
+        dataCurrent={hoursData.exercise_current}
+        dataPrevious={hoursData.exercise_previous}
+        cardClass="card-exercise"
+      />
 
-      <div className="card card-social">
-        <div className="card__content">
-          <div className="card__head">
-            <h2 className='card__title'>Social</h2>
-            <img className='card__dots' src={ThreeDots} alt="" />
-          </div>
-          <div className="card__hours">
-            <p className='card__current'>{
-              hoursData.social_current === undefined
-              ?'0'
-              : hoursData.social_current + 'hrs'
-            }</p>
-            <p className='card__previous'>Previous - {
-              hoursData.social_previous === undefined
-              ? '0'
-              : hoursData.social_previous + 'hrs'
-            }</p>
-          </div>
-        </div>
-      </div>
+      <Card
+        title="Social"
+        dataCurrent={hoursData.social_current}
+        dataPrevious={hoursData.social_previous}
+        cardClass="card-social"
+      />
 
-      <div className="card card-self-care">
-        <div className="card__content">
-          <div className="card__head">
-            <h2 className='card__title'>Self Care</h2>
-            <img className='card__dots' src={ThreeDots} alt="" />
-          </div>
-          <div className="card__hours">
-            <p className='card__current'>{
-              hoursData.care_current === undefined
+      <Card
+        title="Self Care"
+        dataCurrent={hoursData.care_current}
+        dataPrevious={hoursData.care_previous}
+        cardClass="card-social"
+      />
+    </div>
+  )
+}
+
+const Card = ({ title, dataCurrent, dataPrevious, cardClass }) => {
+  return (
+    <div className={`card ${cardClass}`}>
+      <div className="card__content">
+        <div className="card__head">
+          <h2 className='card__title'>{title}</h2>
+          <img className='card__dots' src={ThreeDots} alt="" />
+        </div>
+        <div className="card__hours">
+          <p className='card__current'>
+            {
+              dataCurrent === undefined
               ?'0'
-              : hoursData.care_current + 'hrs'
-            }</p>
-            <p className='card__previous'>Previous - {
-              hoursData.care_previous === undefined
+              : dataCurrent + 'hrs'
+            }
+          </p>
+          <p className='card__previous'>Previous - 
+            {
+              dataPrevious === undefined
               ? '0'
-              : hoursData.care_previous + 'hrs'
-            }</p>
-          </div>
+              : dataPrevious + 'hrs'
+            }
+          </p>
         </div>
       </div>
     </div>
+  )
+}
+
+const Button = ({ buttonName, funcName }) => {
+  return (
+    <button onClick={funcName} className="profile__button">{buttonName}</button>
   )
 }
 
