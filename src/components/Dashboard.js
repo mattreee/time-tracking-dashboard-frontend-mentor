@@ -1,37 +1,47 @@
 import ProfilePic from '../images/image-jeremy.png';
-import ThreeDots from '../images/icon-ellipsis.svg';
-import React, { useState } from 'react'
+import React, { useState } from 'react';
+import Card from './Card';
+import Button from './Button';
 
 const Dashboard = () => {
-  const [hoursData, setHoursData] = useState({});
+  const [hoursData, setHoursData] = useState();
+  const [firstStateLoad, setFirstStateLoad] = useState(false);
 
   function fetchData(func, timeframe) {
-    fetch('./data.json')
+    fetch('./data.json', {
+      headers: {
+        "Content-Type": "application/json",
+        "Accept": "application/json"
+      }
+    })
       .then(res => res.json())
-      .then(data => setHoursData( func(data, timeframe) ));
+      .then(data => func(data, timeframe));
   }
 
-  function updateInfo(data, timeframe) {
-    return {
-      "work_current": data[0].timeframes[timeframe].current,
-      "work_previous": data[0].timeframes[timeframe].previous,
-
-      "play_current": data[1].timeframes[timeframe].current,
-      "play_previous": data[1].timeframes[timeframe].previous,
-
-      "study_current": data[2].timeframes[timeframe].current,
-      "study_previous": data[2].timeframes[timeframe].previous,
-
-      "exercise_current": data[3].timeframes[timeframe].current,
-      "exercise_previous": data[3].timeframes[timeframe].previous,
-
-      "social_current": data[4].timeframes[timeframe].current,
-      "social_previous": data[4].timeframes[timeframe].previous,
-
-      "care_current": data[5].timeframes[timeframe].current,
-      "care_previous": data[5].timeframes[timeframe].previous
-    };
+  const updateInfo = (data, timeframe) => {
+    let dataLength = data.length;
+    let obj = {};
+    
+    for (let i = 0; i < dataLength; i++) {
+      Object.defineProperty(obj, data[i].title, {
+        value: {
+          "current": data[i].timeframes[timeframe].current,
+          "previous": data[i].timeframes[timeframe].previous
+        },
+        writable: true,
+        configurable: true,
+        enumerable: true
+      })
+    }
+    setHoursData(obj);
   }
+  
+  (function initialState() {
+    if(!firstStateLoad) {
+      fetchData(updateInfo, 'weekly');
+      setFirstStateLoad(true);
+    }
+  })();
 
   return (
     <div className="dashboard">
@@ -52,81 +62,46 @@ const Dashboard = () => {
 
       <Card
         title="Work"
-        dataCurrent={hoursData.work_current}
-        dataPrevious={hoursData.work_previous}
+        dataCurrent={hoursData === undefined ? '0' : hoursData.Work.current}
+        dataPrevious={hoursData === undefined ? '0' : hoursData.Work.previous}
         cardClass="card-work"
       />
 
       <Card
         title="Play"
-        dataCurrent={hoursData.play_current}
-        dataPrevious={hoursData.play_previous}
+        dataCurrent={hoursData === undefined ? '0' : hoursData.Play.current}
+        dataPrevious={hoursData === undefined ? '0' : hoursData.Play.previous}
         cardClass="card-play"
       />
 
       <Card
         title="Study"
-        dataCurrent={hoursData.study_current}
-        dataPrevious={hoursData.study_previous}
+        dataCurrent={hoursData === undefined ? '0' : hoursData.Study.current}
+        dataPrevious={hoursData === undefined ? '0' : hoursData.Study.previous}
         cardClass="card-study"
       />
 
       <Card
         title="Exercise"
-        dataCurrent={hoursData.exercise_current}
-        dataPrevious={hoursData.exercise_previous}
+        dataCurrent={hoursData === undefined ? '0' : hoursData.Exercise.current}
+        dataPrevious={hoursData === undefined ? '0' : hoursData.Exercise.previous}
         cardClass="card-exercise"
       />
 
       <Card
         title="Social"
-        dataCurrent={hoursData.social_current}
-        dataPrevious={hoursData.social_previous}
+        dataCurrent={hoursData === undefined ? '0' : hoursData.Social.current}
+        dataPrevious={hoursData === undefined ? '0' : hoursData.Social.previous}
         cardClass="card-social"
       />
 
       <Card
         title="Self Care"
-        dataCurrent={hoursData.care_current}
-        dataPrevious={hoursData.care_previous}
+        dataCurrent={hoursData === undefined ? '0' : hoursData['Self Care'].current}
+        dataPrevious={hoursData === undefined ? '0' : hoursData['Self Care'].previous}
         cardClass="card-social"
       />
     </div>
-  )
-}
-
-const Card = ({ title, dataCurrent, dataPrevious, cardClass }) => {
-  return (
-    <div className={`card ${cardClass}`}>
-      <div className="card__content">
-        <div className="card__head">
-          <h2 className='card__title'>{title}</h2>
-          <img className='card__dots' src={ThreeDots} alt="" />
-        </div>
-        <div className="card__hours">
-          <p className='card__current'>
-            {
-              dataCurrent === undefined
-              ?'0'
-              : dataCurrent + 'hrs'
-            }
-          </p>
-          <p className='card__previous'>Previous - 
-            {
-              dataPrevious === undefined
-              ? '0'
-              : dataPrevious + 'hrs'
-            }
-          </p>
-        </div>
-      </div>
-    </div>
-  )
-}
-
-const Button = ({ buttonName, funcName }) => {
-  return (
-    <button onClick={funcName} className="profile__button">{buttonName}</button>
   )
 }
 
